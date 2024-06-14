@@ -14,7 +14,7 @@ docker-compose -f backend/docker-compose.yml down
 docker-compose -f frontend/docker-compose.yml down
 
 # Entferne alle Images (Optional)
-docker image prune -af
+docker images | grep $PROJECT_NAME | awk '{print $3}' | xargs docker rmi -f
 
 # Baue und starte Backend
 cd $PROJECT_DIR/backend
