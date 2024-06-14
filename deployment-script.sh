@@ -8,7 +8,7 @@ log() {
 log "Deployment script started"
 
 # Pfad zu deinem Projekt
-PROJECT_DIR="/path/to/timeloom"
+PROJECT_DIR="/home/pi/timeloom"
 PROJECT_NAME="timeloom"
 
 # Wechsle in das Projektverzeichnis

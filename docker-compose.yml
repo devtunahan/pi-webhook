@@ -1,0 +1,10 @@
+version: '3'
+services:
+  webhook:
+    build: .
+    ports:
+      - "8000:8000"
+    volumes:
+      - /home/pi/timeloom:/app/timeloom
+    environment:
+      - FLASK_ENV=development
