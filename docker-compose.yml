@@ -1,10 +1,9 @@
 version: '3'
 services:
-  webhook:
+  webhook-server:
     build: .
+    container_name: webhook-server
     ports:
-      - "8000:8000"
+      - "5000:5000"
     volumes:
-      - /home/pi/timeloom:/app/timeloom
-    environment:
-      - FLASK_ENV=development
+      - .:/app
