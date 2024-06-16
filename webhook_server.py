@@ -21,20 +21,20 @@ def verify_signature(request):
     if not hmac.compare_digest(mac.hexdigest(), signature):
         abort(400, 'Invalid signature')
 
-@app.route('/webhook', methods=['POST'])
-def webhook():
-    logging.info('Webhook received')
-    verify_signature(request)
-    data = request.json
-    repository = data['repository']['name']
-    branch = data['ref'].split('/')[-1]
-    if repository == 'pi-webhook' and branch == 'main':
-        logging.info(f'Triggering redeployment for repository {repository} on branch {branch}')
-        result = subprocess.run(['./redeploy.sh'], capture_output=True, text=True)
-        logging.info(result.stdout)
-        if result.stderr:
-            logging.error(result.stderr)
-    return jsonify({'status': 'success'}), 200
+# @app.route('/webhook', methods=['POST'])
+# def webhook():
+#     logging.info('Webhook received')
+#     verify_signature(request)
+#     data = request.json
+#     repository = data['repository']['name']
+#     branch = data['ref'].split('/')[-1]
+#     if repository == 'pi-webhook' and branch == 'main':
+#         logging.info(f'Triggering redeployment for repository {repository} on branch {branch}')
+#         result = subprocess.run(['./redeploy.sh'], capture_output=True, text=True)
+#         logging.info(result.stdout)
+#         if result.stderr:
+#             logging.error(result.stderr)
+#     return jsonify({'status': 'success'}), 200
 
 # @app.route('/webhook/timeloom', methods=['POST'])
 # def webhook_projekt1():
