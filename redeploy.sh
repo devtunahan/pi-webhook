@@ -10,13 +10,22 @@ error_exit()
     exit 1
 }
 
+REMOTE_HOST="pi@192.168.68.114"
+REMOTE_DIR="~/pi-webhook"
+
 echo "Beende den Container..."
-ssh pi@192.168.68.114 "docker-compose down" || error_exit "Fehler beim Beenden des Containers."
+ssh $REMOTE_HOST "cd $REMOTE_DIR && docker-compose down" || error_exit "Fehler beim Beenden des Containers."
+
+echo "Ziehe die neuesten Änderungen vom Git-Repository..."
+ssh $REMOTE_HOST "cd $REMOTE_DIR && git pull" || error_exit "Fehler beim Ausführen von 'git pull'."
+
+echo "Setze Berechtigungen für 'redeploy.sh'..."
+ssh $REMOTE_HOST "cd $REMOTE_DIR && chmod +x redeploy.sh" || error_exit "Fehler beim Setzen der Berechtigungen für 'redeploy.sh'."
 
 echo "Baue das Docker-Image neu..."
-ssh pi@192.168.68.114 "docker-compose build" || error_exit "Fehler beim Bauen des Docker-Images."
+ssh $REMOTE_HOST "cd $REMOTE_DIR && docker-compose build" || error_exit "Fehler beim Bauen des Docker-Images."
 
 echo "Starte den Container erneut..."
-ssh pi@192.168.68.114 "docker-compose up -d" || error_exit "Fehler beim Starten des Containers."
+ssh $REMOTE_HOST "cd $REMOTE_DIR && docker-compose up -d" || error_exit "Fehler beim Starten des Containers."
 
 echo "Redeployment abgeschlossen."
