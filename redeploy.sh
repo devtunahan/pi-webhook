@@ -28,4 +28,4 @@ ssh $REMOTE_HOST "cd $REMOTE_DIR && docker-compose build" || error_exit "Fehler 
 echo "Starte den Container erneut..."
 ssh $REMOTE_HOST "cd $REMOTE_DIR && docker-compose up -d" || error_exit "Fehler beim Starten des Containers."
 
-echo "Redeployment abgeschlossen."
+echo "Redeployment abgeschlossen!"
