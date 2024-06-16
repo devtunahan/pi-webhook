@@ -13,16 +13,25 @@ error_exit()
 REMOTE_HOST="pi@192.168.68.114"
 REMOTE_DIR="~/pi-webhook"
 
-echo "Beende den Container..."
-ssh $REMOTE_HOST "cd $REMOTE_DIR && docker-compose down" || error_exit "Fehler beim Beenden des Containers."
+echo "Beende den aktuellen Container..."
+ssh $REMOTE_HOST "cd $REMOTE_DIR && docker-compose stop webhook-server" || error_exit "Fehler beim Beenden des Containers."
 
 echo "Ziehe die neuesten Änderungen vom Git-Repository..."
 ssh $REMOTE_HOST "cd $REMOTE_DIR && git pull" || error_exit "Fehler beim Ausführen von 'git pull'."
 
-echo "Baue das Docker-Image neu..."
-ssh $REMOTE_HOST "cd $REMOTE_DIR && docker-compose build" || error_exit "Fehler beim Bauen des Docker-Images."
+echo "Setze Berechtigungen für 'redeploy.sh'..."
+ssh $REMOTE_HOST "cd $REMOTE_DIR && chmod +x redeploy.sh" || error_exit "Fehler beim Setzen der Berechtigungen für 'redeploy.sh'."
 
-echo "Starte den Container erneut..."
-ssh $REMOTE_HOST "cd $REMOTE_DIR && docker-compose up -d" || error_exit "Fehler beim Starten des Containers."
+echo "Baue das neue Docker-Image..."
+ssh $REMOTE_HOST "cd $REMOTE_DIR && docker-compose build webhook-server-new" || error_exit "Fehler beim Bauen des Docker-Images."
 
-echo "Redeployment abgeschlossen!"
+echo "Starte den neuen Container..."
+ssh $REMOTE_HOST "cd $REMOTE_DIR && docker-compose up -d webhook-server-new" || error_exit "Fehler beim Starten des neuen Containers."
+
+echo "Stoppe den alten Container..."
+ssh $REMOTE_HOST "cd $REMOTE_DIR && docker-compose down webhook-server" || error_exit "Fehler beim Herunterfahren des alten Containers."
+
+echo "Starte den neuen Container auf dem alten Port..."
+ssh $REMOTE_HOST "cd $REMOTE_DIR && docker-compose down webhook-server-new && docker-compose up -d webhook-server-new --name webhook-server" || error_exit "Fehler beim Starten des neuen Containers auf dem alten Port."
+
+echo "Redeployment abgeschlossen."

@@ -8,3 +8,13 @@ services:
     volumes:
       - .:/app
       - ~/.ssh:/root/.ssh  # SSH-Schlüssel in den Container mounten
+
+  webhook-server-new:
+    build: .
+    container_name: webhook-server-new
+    ports:
+      - "5001:5000"
+    volumes:
+      - .:/app
+      - ~/.ssh:/root/.ssh  # SSH-Schlüssel in den Container mounten
+    command: ["sh", "-c", "sleep infinity"]
