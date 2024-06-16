@@ -34,4 +34,4 @@ ssh $REMOTE_HOST "cd $REMOTE_DIR && docker-compose down webhook-server" || error
 echo "Starte den neuen Container auf dem alten Port..."
 ssh $REMOTE_HOST "cd $REMOTE_DIR && docker-compose down webhook-server-new && docker-compose up -d webhook-server-new --name webhook-server" || error_exit "Fehler beim Starten des neuen Containers auf dem alten Port."
 
-echo "Redeployment abgeschlossen."
+echo "Redeployment abgeschlossen!"
