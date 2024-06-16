@@ -10,4 +10,7 @@ RUN pip install -r requirements.txt
 
 COPY . .
 
+# Stelle sicher, dass redeploy.sh ausführbar ist
+RUN chmod +x redeploy.sh
+
 CMD ["python", "webhook_server.py"]
