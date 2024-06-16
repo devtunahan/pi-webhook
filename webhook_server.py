@@ -36,14 +36,14 @@ def webhook():
             logging.error(result.stderr)
     return jsonify({'status': 'success'}), 200
 
-@app.route('/webhook/timeloom', methods=['POST'])
-def webhook_projekt1():
-    verify_signature(request)
-    data = request.json
-    if data['ref'] == 'refs/heads/main':
-        print("Hier kann das deployment scripts für timeloom ausgeführt werden!")
-        # subprocess.run(['./deploy_projekt1.sh'])
-    return jsonify({'status': 'success'}), 200
+# @app.route('/webhook/timeloom', methods=['POST'])
+# def webhook_projekt1():
+#     verify_signature(request)
+#     data = request.json
+#     if data['ref'] == 'refs/heads/main':
+#         print("Hier kann das deployment scripts für timeloom ausgeführt werden!")
+#         # subprocess.run(['./deploy_projekt1.sh'])
+#     return jsonify({'status': 'success'}), 200
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
