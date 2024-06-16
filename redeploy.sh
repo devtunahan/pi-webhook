@@ -1,21 +1,22 @@
 #!/bin/bash
 
-# Name des Docker Compose Service, der den Webhook-Server enthält
-SERVICE_NAME="webhook-server"
+# Exit immediately if a command exits with a non-zero status.
+set -e
 
-# Docker Compose Datei
-COMPOSE_FILE="docker-compose.yml"
+# Function to handle errors
+error_exit()
+{
+    echo "$1" 1>&2
+    exit 1
+}
 
 echo "Beende den Container..."
-docker-compose -f $COMPOSE_FILE down
-
-echo "Lösche das Docker-Image..."
-docker rmi ${SERVICE_NAME}
+ssh pi@192.168.68.114 "docker-compose down" || error_exit "Fehler beim Beenden des Containers."
 
 echo "Baue das Docker-Image neu..."
-docker-compose -f $COMPOSE_FILE build
+ssh pi@192.168.68.114 "docker-compose build" || error_exit "Fehler beim Bauen des Docker-Images."
 
 echo "Starte den Container erneut..."
-docker-compose -f $COMPOSE_FILE up -d
+ssh pi@192.168.68.114 "docker-compose up -d" || error_exit "Fehler beim Starten des Containers."
 
 echo "Redeployment abgeschlossen."
